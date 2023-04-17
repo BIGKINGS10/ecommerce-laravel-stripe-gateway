@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use Illuminate\Http\Request;
+use Stripe\Checkout\Session;
 
 class StripeController extends Controller
 {
@@ -11,19 +13,21 @@ class StripeController extends Controller
     }
 
     public function checkout() {
-        \Stripe\Stripe::setApiKey(config('stripe.sk'));
-        $session = \Stripe\Checkout\Session::create([
+        Stripe::setApiKey(config('stripe.sk'));
+        $session = Session::create([
             'line_items' => [
+                [
                 'price_data' => [
-                    'currency' => 'gdp',
+                    'currency' => 'usd',
                     'product_data' => [
-                        'name' => 'Send me money!!!'
+                        'name' => 'Sleek African Men Shirt'
                     ],
-                    'unit_amount' => 500,
+                    'unit_amount' => 5000,
                 ],
 
                 'quantity' => 1,
             ],
+        ],
             'mode' => 'payment',
             'success_url' => route('success'),
             'cancel_url' => route('index')
